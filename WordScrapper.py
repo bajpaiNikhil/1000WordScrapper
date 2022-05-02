@@ -37,24 +37,35 @@ async def get_html():
 
 def get_title(html: str) -> list:
     list_words = []
-    dict_word = {}
-
+    count = 0
+    file_word_list = open("wordList.txt", "w")
     soup = bs4.BeautifulSoup(html, 'html.parser')
     header = soup.find_all("div", class_="thecontent")
     print()
     for job_elements in header:
-        # print(job_elements, end="\n" * 2)
         words = job_elements.find_all("ol")
-        # print(words, end="\n" * 2)
         for word in words:
             for items in word.find_all("li"):
                 item = items.text.strip()
-                itemAfterSplit = item.split(" ")
-                print( itemAfterSplit[0], " ".join(itemAfterSplit[2:]))
-                dict_word["word"] = itemAfterSplit[0]
-                dict_word["example"] = " ".join(itemAfterSplit[2:])
-                list_words.append(items.text.strip())
-    print(dict_word)
+                # print(item.index(" "), item , item[:item.index(" ")])
+                wordIs = item[:item.index(" ")]
+                count += 1
+                if count > 3:
+                    file_word_list.writelines(wordIs+"\n")
+                # if "\xa0" not in i[0] and "\xa0-" not in i[0]:
+                #     print(i[0], "good")
+                # if
+                # itemAfterSplit = item.split(" ")
+                # print(itemAfterSplit , ' -' in itemAfterSplit)
+                # # print(itemAfterSplit[0], " ".join(itemAfterSplit[2:]) , count )
+                # item_dict[word] = itemAfterSplit[0]
+                # item_dict[word] = " ".join(itemAfterSplit[2:])
+                # dict_word[count] = item_dict
+                # count += 1
+                # dict_word["word"] = itemAfterSplit[0]
+                # dict_word["example"] = " ".join(itemAfterSplit[2:])
+                list_words.append(item)
+    file_word_list.close()
     return list_words[3:]
 
 
